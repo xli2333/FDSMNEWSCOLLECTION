@@ -213,14 +213,14 @@ async def rag_search(request: SearchRequest):
     # Euclidean Distance to Similarity conversion: 1 / (1 + distance)
     
     # 1. Threshold: Minimum score to be considered relevant.
-    MIN_RELEVANCE_THRESHOLD = 0.55 
+    MIN_RELEVANCE_THRESHOLD = 0.8 
     
     # 2. Frequency Boost: Bonus for each additional query that finds the same doc.
     FREQUENCY_BOOST = 0.05 
     
     # 3. Source Weights: Prioritize original query results.
     ORIGINAL_QUERY_WEIGHT = 1.0
-    EXPANDED_QUERY_WEIGHT = 0.85 # 15% penalty for docs found ONLY by expanded terms
+    EXPANDED_QUERY_WEIGHT = 0.6 # 15% penalty for docs found ONLY by expanded terms
 
     # 2. Parallel/Sequential Search & Fusion
     # Map: article_id -> {doc: Document, max_similarity: float, hit_count: int, hit_by_original: bool}
