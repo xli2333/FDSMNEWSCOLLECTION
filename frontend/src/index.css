@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: 'Inter';
+  src: url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+}
+@font-face {
+  font-family: 'Noto Serif SC';
+  src: url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700&display=swap');
+}
+
+@theme {
+  --color-fudan-blue: #0d0783;
+  --color-fudan-orange: #ea6b00;
+  --color-fudan-dark: #0a0560;
+  --color-fudan-light: #f4f4f5;
+  
+  --font-sans: "Inter", "Noto Sans SC", "system-ui", "sans-serif";
+  --font-serif: "Noto Serif SC", "Playfair Display", "Songti SC", "serif";
+}
+
+@layer base {
+  body {
+    @apply font-sans text-slate-900 bg-white antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif font-bold text-fudan-blue;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

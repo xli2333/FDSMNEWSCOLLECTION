@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+.venv
+venv/
+ENV/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project Raw Data (Sensitive & Large)
+Fudan_Business_Knowledge_Data/
+Fudan_News_Data/
+Fudan_Wechat_Data/
+
+# Large Database & Index Files (Upload manually to Render Disk)
+*.db
+faiss_index/
+backend/chroma_db/
+
+# Node/Frontend
+node_modules/
+frontend/node_modules/
+frontend/dist/
+.npm
+*.log
+
+# IDE
+.vscode/
+.idea/
