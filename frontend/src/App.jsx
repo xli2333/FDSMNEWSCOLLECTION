@@ -107,7 +107,7 @@ function App() {
               animate={{ opacity: 1, y: 0 }}
               className="font-serif text-6xl md:text-8xl font-black text-fudan-blue mb-12 tracking-tight leading-tight text-center"
             >
-              洞察<br/>商业未来
+              <br/>鉴往知来
             </motion.h1>
           )}
 
