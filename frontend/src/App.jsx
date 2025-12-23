@@ -108,8 +108,8 @@ function App() {
               className="font-serif text-6xl md:text-8xl font-black text-fudan-blue mb-12 tracking-tight leading-tight text-center"
             >
               <div className="text-center md:text-left">
-                <div>阅历过去</div>
-                <div className="ml-[1em]">洞察未来</div>
+                <div>开智求真</div>
+                <div className="ml-[1em]">拓新领变</div>
               </div>
             </motion.h1>
           )}
