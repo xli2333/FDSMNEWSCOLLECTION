@@ -90,9 +90,6 @@ function App() {
           <img src="/mainpage_logo.png" alt="Logo" className="h-[50px] mb-2" />
           <div className="font-serif font-bold text-xl tracking-widest">复旦管院新闻稿智能体</div>
         </div>
-        <div className="text-xs font-sans tracking-widest uppercase opacity-80">
-          Knowledge Base System v1.0
-        </div>
       </nav>
 
       {/* --- HERO / SEARCH SECTION --- */}
