@@ -108,7 +108,7 @@ except Exception as e:
 # 2. Data Models (Pydantic)
 class SearchRequest(BaseModel):
     query: str
-    top_k: int = 5
+    top_k: int = 10
 
 class SearchResult(BaseModel):
     id: int
@@ -166,7 +166,7 @@ def expand_query(original_query: str) -> List[str]:
     """
     prompt = PromptTemplate.from_template(
         "You are a precise search query optimizer. "
-        "Generate 2-3 strictly synonymous or highly specific keywords for the user's query "
+        "Generate 3-4 strictly synonymous or highly specific keywords for the user's query "
         "to improve vector retrieval accuracy.\n\n"
         "Constraint: Do NOT generate broad topics, parent categories, or loosely related concepts. "
         "For example, if the query is 'Robot', do NOT output 'AI' or 'Technology'. Output 'Robotics', 'Automaton', 'Bot'.\n\n"
@@ -213,7 +213,7 @@ async def rag_search(request: SearchRequest):
     # Euclidean Distance to Similarity conversion: 1 / (1 + distance)
     
     # 1. Threshold: Minimum score to be considered relevant.
-    MIN_RELEVANCE_THRESHOLD = 0.8 
+    MIN_RELEVANCE_THRESHOLD = 0.7 
     
     # 2. Frequency Boost: Bonus for each additional query that finds the same doc.
     FREQUENCY_BOOST = 0.05 
