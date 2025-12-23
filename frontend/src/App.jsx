@@ -85,7 +85,7 @@ function App() {
     <div className="min-h-screen bg-slate-50 text-slate-900 selection:bg-fudan-orange selection:text-white overflow-x-hidden">
       
       {/* --- HEADER / NAV --- */}
-      <nav className="absolute top-0 w-full p-6 flex justify-between items-center z-40 mix-blend-difference text-white pointer-events-none">
+      <nav className="absolute top-0 w-full p-6 flex justify-between items-center z-40 text-fudan-blue pointer-events-none">
         <div className="flex flex-col items-start pointer-events-auto cursor-pointer" onClick={() => {setHasSearched(false); setResults([]); setQuery('')}}>
           <img src="/mainpage_logo.png" alt="Logo" className="h-[50px] mb-2" />
           <div className="font-serif font-bold text-xl tracking-widest">复旦管院新闻稿智能体</div>
