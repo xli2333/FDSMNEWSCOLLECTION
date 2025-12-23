@@ -308,9 +308,7 @@ function App() {
                transition={{ delay: 0.5 }}
                className="mt-16 flex items-center gap-8 text-fudan-blue/30 font-sans text-[10px] tracking-[0.3em] uppercase"
              >
-               <span className="flex items-center gap-2"><div className="w-2 h-2 bg-fudan-blue"></div> FUDAN UNIVERSITY</span>
-               <span className="flex items-center gap-2"><div className="w-2 h-2 bg-fudan-orange"></div> BUSINESS KNOWLEDGE</span>
-               <span>RAG TECHNOLOGY</span>
+               
              </motion.div>
           )}
         </motion.div>
@@ -448,7 +446,7 @@ function App() {
                     <div className="mt-24 pt-12 border-t border-slate-100 text-center pb-20">
                       <div className="font-serif text-2xl text-slate-300 italic mb-4">Fudan Knowledge Base</div>
                       <p className="text-xs text-slate-400 font-sans tracking-widest">
-                          本导读由 AI 生成，长度约为原文的 50%-70%。
+                          本文由 AI 总结改写，长度约为原文的50%-70%。
                       </p>
                     </div>
                   </div>
