@@ -1,13 +1,13 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api";
 
-export async function searchArticles(query) {
+export async function searchArticles(query, source = null) {
   try {
     const response = await fetch(`${API_BASE_URL}/rag_search`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ query, top_k: 20 }), // Increased top_k for better coverage
+      body: JSON.stringify({ query, top_k: 20, source }), // Increased top_k for better coverage
     });
     if (!response.ok) throw new Error("Search failed");
     return await response.json();
@@ -17,7 +17,7 @@ export async function searchArticles(query) {
   }
 }
 
-export async function searchSql(keyword, start_date = null, end_date = null) {
+export async function searchSql(keyword, start_date = null, end_date = null, source = null) {
   try {
     const response = await fetch(`${API_BASE_URL}/sql_search`, {
       method: "POST",
@@ -28,6 +28,7 @@ export async function searchSql(keyword, start_date = null, end_date = null) {
         keyword, 
         start_date, 
         end_date,
+        source,
         limit: 50 // Increase limit for SQL search to show more results
       }), 
     });

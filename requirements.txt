@@ -8,3 +8,4 @@ faiss-cpu
 google-genai
 python-multipart
 requests
+python-dotenv

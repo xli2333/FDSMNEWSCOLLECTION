@@ -6,6 +6,11 @@ import sqlite3
 import os
 import base64
 import io
+from dotenv import load_dotenv
+
+# Load environment variables from .env file (if it exists)
+load_dotenv()
+
 from google import genai
 from google.genai import types
 
@@ -13,6 +18,7 @@ import shutil
 
 from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
 from langchain_community.vectorstores import FAISS # Changed from Chroma
+from langchain_community.vectorstores.utils import DistanceStrategy
 from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 
@@ -97,7 +103,8 @@ try:
         vectorstore = FAISS.load_local(
             FAISS_DB_DIR, 
             embeddings, 
-            allow_dangerous_deserialization=True # Required for local pickle files
+            allow_dangerous_deserialization=True, # Required for local pickle files
+            distance_strategy=DistanceStrategy.COSINE
         )
         print(f"✅ Successfully loaded FAISS Index")
     else:
@@ -109,6 +116,10 @@ except Exception as e:
 class SearchRequest(BaseModel):
     query: str
     top_k: int = 10
+<<<<<<< HEAD
+=======
+    source: Optional[str] = None
+>>>>>>> a4a71b8 (Update backend logic, FAISS implementation, and frontend API calls)
 
 class SearchResult(BaseModel):
     id: int
@@ -213,7 +224,7 @@ async def rag_search(request: SearchRequest):
     # Euclidean Distance to Similarity conversion: 1 / (1 + distance)
     
     # 1. Threshold: Minimum score to be considered relevant.
-    MIN_RELEVANCE_THRESHOLD = 0.7 
+    MIN_RELEVANCE_THRESHOLD = 0.6 
     
     # 2. Frequency Boost: Bonus for each additional query that finds the same doc.
     FREQUENCY_BOOST = 0.05 
@@ -236,11 +247,17 @@ async def rag_search(request: SearchRequest):
         else:
             k_limit = request.top_k
         
-        results = vectorstore.similarity_search_with_score(query_text, k=k_limit)
+        # Prepare Filter
+        search_filter = None
+        if request.source and request.source != "all":
+            search_filter = {"source": request.source}
+
+        results = vectorstore.similarity_search_with_score(query_text, k=k_limit, filter=search_filter)
         
         for doc, distance in results:
-            # Convert L2 Distance to Similarity (0 to 1)
-            similarity = 1 / (1 + distance)
+            # Convert Cosine Distance to Similarity (0 to 1)
+            # Cosine Distance = 1 - Cosine Similarity
+            similarity = 1 - distance
             
             article_id = doc.metadata.get("article_id")
             if not article_id:

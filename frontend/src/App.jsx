@@ -6,6 +6,16 @@ import { searchArticles, searchSql, getArticleDetail, summarizeArticle, travelTi
 import clsx from 'clsx';
 import { Clock, RefreshCw } from 'lucide-react'; // Add icons
 
+const getSourceLabel = (src) => {
+    switch(src) {
+        case 'news': return '学院新闻';
+        case 'wechat': return '公众号';
+        case 'business': return '商业知识';
+        case 'all': return '全部来源';
+        default: return src;
+    }
+};
+
 function App() {
   const [query, setQuery] = useState('');
   const [hasSearched, setHasSearched] = useState(false);
@@ -22,6 +32,7 @@ function App() {
 
   // 'rag' (Relevance) or 'sql' (Time/Exact)
   const [searchMode, setSearchMode] = useState('rag'); 
+  const [source, setSource] = useState('all'); // 'all', 'news', 'wechat', 'business'
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
 
@@ -45,11 +56,11 @@ function App() {
     
     let data = [];
     if (searchMode === 'rag') {
-        data = await searchArticles(query);
+        data = await searchArticles(query, source);
     } else {
         const s = startDate ? `${startDate}-01-01` : null;
         const e = endDate ? `${endDate}-12-31` : null;
-        data = await searchSql(query, s, e);
+        data = await searchSql(query, s, e, source);
     }
     
     console.log(`🔍 ${searchMode.toUpperCase()} Results:`, data);
@@ -171,36 +182,66 @@ function App() {
                   </button>
                 </div>
                 
-                {/* Date Range Picker (Visible only in SQL mode) */}
-                <AnimatePresence>
-                    {searchMode === 'sql' && (
-                        <motion.div 
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            className="bg-slate-50 border-t border-slate-100 overflow-hidden"
-                        >
-                            <div className="flex items-center gap-4 px-8 py-4 text-sm font-sans">
-                                <span className="font-bold text-slate-400 uppercase tracking-wider text-xs">时间范围 (年份)</span>
-                                <input 
-                                    type="text" 
-                                    placeholder="起始 (2020)" 
-                                    value={startDate}
-                                    onChange={(e) => setStartDate(e.target.value)}
-                                    className="bg-white border border-slate-200 px-3 py-1 w-32 focus:border-fudan-orange outline-none"
-                                />
-                                <span className="text-slate-300">—</span>
-                                <input 
-                                    type="text" 
-                                    placeholder="结束 (2025)" 
-                                    value={endDate}
-                                    onChange={(e) => setEndDate(e.target.value)}
-                                    className="bg-white border border-slate-200 px-3 py-1 w-32 focus:border-fudan-orange outline-none"
-                                />
-                            </div>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
+                {/* Filters Section */}
+                <div className="bg-slate-50 border-t border-slate-100 px-8 py-4 flex flex-col md:flex-row gap-6 items-center text-sm font-sans">
+                    
+                    {/* Source Filter (Always Visible) */}
+                    <div className="flex items-center gap-3">
+                        <span className="font-bold text-slate-400 uppercase tracking-wider text-xs flex items-center gap-1">
+                            <Filter size={12}/> 来源
+                        </span>
+                        <div className="flex gap-2">
+                            {['all', 'business', 'news', 'wechat'].map((opt) => (
+                                <button
+                                    key={opt}
+                                    type="button"
+                                    onClick={() => setSource(opt)}
+                                    className={clsx(
+                                        "px-3 py-1 rounded-full text-xs font-bold transition-all border",
+                                        source === opt 
+                                            ? "bg-fudan-blue text-white border-fudan-blue" 
+                                            : "bg-white text-slate-500 border-slate-200 hover:border-fudan-blue/30"
+                                    )}
+                                >
+                                    {getSourceLabel(opt)}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Date Range Picker (Visible only in SQL mode) */}
+                    <AnimatePresence>
+                        {searchMode === 'sql' && (
+                            <motion.div 
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -20 }}
+                                className="flex items-center gap-3 border-l border-slate-200 pl-6"
+                            >
+                                <span className="font-bold text-slate-400 uppercase tracking-wider text-xs flex items-center gap-1">
+                                    <Calendar size={12}/> 年份
+                                </span>
+                                <div className="flex items-center gap-2">
+                                    <input 
+                                        type="text" 
+                                        placeholder="2020" 
+                                        value={startDate}
+                                        onChange={(e) => setStartDate(e.target.value)}
+                                        className="bg-white border border-slate-200 px-3 py-1 w-20 text-center rounded focus:border-fudan-orange outline-none text-xs font-bold text-slate-600"
+                                    />
+                                    <span className="text-slate-300">-</span>
+                                    <input 
+                                        type="text" 
+                                        placeholder="2025" 
+                                        value={endDate}
+                                        onChange={(e) => setEndDate(e.target.value)}
+                                        className="bg-white border border-slate-200 px-3 py-1 w-20 text-center rounded focus:border-fudan-orange outline-none text-xs font-bold text-slate-600"
+                                    />
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
             </form>
           </div>
 
@@ -404,7 +445,7 @@ function App() {
 
                     <header className="mb-12 border-b border-slate-100 pb-12">
                       <div className="flex items-center gap-4 text-xs font-bold tracking-widest text-fudan-blue uppercase mb-6 flex-wrap">
-                        <span className="px-2 py-1 bg-fudan-blue/5 rounded">{selectedArticle.source}</span>
+                        <span className="px-2 py-1 bg-fudan-blue/5 rounded">{getSourceLabel(selectedArticle.source)}</span>
                         <span className="flex items-center gap-1"><Calendar size={12}/> {selectedArticle.publish_date}</span>
                         
                         {selectedArticle.link && (
@@ -475,7 +516,14 @@ function ResultCard({ item, index, onClick }) {
       <div>
         <div className="mb-4 flex items-center gap-3 text-xs font-bold tracking-widest uppercase border-b border-fudan-blue/10 pb-2">
            {/* Source & Date Only */}
-           <span className="text-fudan-blue">{item.source}</span>
+           <span className={clsx(
+               "px-2 py-0.5 rounded text-[10px]",
+               item.source === 'business' ? "bg-purple-100 text-purple-700" :
+               item.source === 'news' ? "bg-blue-100 text-blue-700" :
+               item.source === 'wechat' ? "bg-green-100 text-green-700" : "text-fudan-blue"
+           )}>
+               {getSourceLabel(item.source)}
+           </span>
            <span className="text-slate-400 ml-auto flex items-center gap-1">
               <Calendar size={10} /> {item.publish_date}
            </span>

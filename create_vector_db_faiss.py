@@ -4,6 +4,7 @@ import time
 from tqdm import tqdm
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_community.vectorstores import FAISS
+from langchain_community.vectorstores.utils import DistanceStrategy
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
 
@@ -99,7 +100,7 @@ def create_vector_store(chunks):
         for attempt in range(max_retries):
             try:
                 if vectorstore is None:
-                    vectorstore = FAISS.from_documents(batch, embeddings)
+                    vectorstore = FAISS.from_documents(batch, embeddings, distance_strategy=DistanceStrategy.COSINE)
                 else:
                     vectorstore.add_documents(batch)
                 break # Success

@@ -5,6 +5,7 @@ import sqlite3
 BASE_DIR = os.getcwd()
 NEWS_DIR = os.path.join(BASE_DIR, 'Fudan_News_Data')   # Changed from Media to News
 WECHAT_DIR = os.path.join(BASE_DIR, 'Fudan_Wechat_Data')
+BUSINESS_DIR = os.path.join(BASE_DIR, 'Fudan_Business_Knowledge_Data')
 DB_NAME = 'fudan_knowledge_base.db'
 
 def init_db():
@@ -118,6 +119,12 @@ def main():
         process_directory(conn, 'wechat', WECHAT_DIR)
     else:
         print(f"Directory not found: {WECHAT_DIR}")
+
+    # Process Business Knowledge Data (Source: business)
+    if os.path.exists(BUSINESS_DIR):
+        process_directory(conn, 'business', BUSINESS_DIR)
+    else:
+        print(f"Directory not found: {BUSINESS_DIR}")
 
     # Verify counts
     cursor = conn.cursor()
