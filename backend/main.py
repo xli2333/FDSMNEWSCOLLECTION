@@ -116,10 +116,7 @@ except Exception as e:
 class SearchRequest(BaseModel):
     query: str
     top_k: int = 10
-<<<<<<< HEAD
-=======
     source: Optional[str] = None
->>>>>>> a4a71b8 (Update backend logic, FAISS implementation, and frontend API calls)
 
 class SearchResult(BaseModel):
     id: int
