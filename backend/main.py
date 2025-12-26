@@ -221,7 +221,7 @@ async def rag_search(request: SearchRequest):
     # Euclidean Distance to Similarity conversion: 1 / (1 + distance)
     
     # 1. Threshold: Minimum score to be considered relevant.
-    MIN_RELEVANCE_THRESHOLD = 0.6 
+    MIN_RELEVANCE_THRESHOLD = 0.35 
     
     # 2. Frequency Boost: Bonus for each additional query that finds the same doc.
     FREQUENCY_BOOST = 0.05 
